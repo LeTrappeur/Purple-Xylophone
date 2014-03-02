@@ -3,7 +3,7 @@ Purple-Xylophone
 
  Project for the cyberpunkjam from 1st to 10th March 2014
  
-<french>
+[french]
  
 Puzzle-game-die-and-retry-vu-de-haut
 SFML et BOX2D
@@ -25,5 +25,5 @@ Selection RGB des couleurs. (+)
 Niveaux courts avec possibilité de checkpoints
 Tableau en 32*32 1024*768 32 tiles en largeur 24 en hauteur
 
-</french>
+[/french]
 
