@@ -82,4 +82,9 @@ namespace Utility
         assert(vector != sf::Vector2f(0.f, 0.f));
         return vector / length(vector);
     }
+
+    float radTodeg(float angle)
+    {
+        return (float)(180.f * angle / pi());
+    }
 }

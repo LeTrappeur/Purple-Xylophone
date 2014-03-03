@@ -24,6 +24,8 @@ namespace Utility
 
     sf::Vector2f unitVector(sf::Vector2f vector);
 
+    float radTodeg(float angle);
+
     constexpr float pi() { return std::atan(1)*4; }
 }
 

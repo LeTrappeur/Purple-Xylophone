@@ -22,6 +22,11 @@ class Actor : public Entity
         virtual unsigned int    getCategory() const;
         virtual bool            isDestroyed() const;
 
+        void                    goForward();
+        void                    goBackward();
+        void                    turnLeft();
+        void                    turnRight();
+
     private:
         virtual void            drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         static b2Body*          createBody(b2World& world);
@@ -30,20 +35,10 @@ class Actor : public Entity
         virtual void            updateCurrent(sf::Time dt, CommandQueue& commands);
 
     protected:
-        enum LookingOrientation
-        {
-            Left,
-            Right,
-            Up,
-            Down,
-            Count,
-        };
-
-    protected:
         Type                    m_type;
-        LookingOrientation      m_lookingOrientation;
 
         sf::Sprite              m_sprite;
+        sf::Vector2f            m_headDirection;
 };
 
 

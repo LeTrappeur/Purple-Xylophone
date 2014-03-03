@@ -16,8 +16,10 @@ class Player
     public:
         enum Action
         {
-            GoLeft,
-            GoRight,
+            GoForward,
+            GoBackward,
+            TurnLeft,
+            TurnRight,
             ActionCount
         };
 

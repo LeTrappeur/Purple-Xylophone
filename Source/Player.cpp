@@ -3,8 +3,11 @@
 Player::Player()
 {
         // Set initial key bindings
-        m_keyBinding[sf::Keyboard::Q] = GoLeft;
-        m_keyBinding[sf::Keyboard::D] = GoRight;
+        m_keyBinding[sf::Keyboard::Z] = GoForward;
+        m_keyBinding[sf::Keyboard::S] = GoBackward;
+        m_keyBinding[sf::Keyboard::Q] = TurnLeft;
+        m_keyBinding[sf::Keyboard::D] = TurnRight;
+
         // Set initial action bindings
         initializeActions();
 
@@ -105,16 +108,21 @@ sf::Keyboard::Key Player::getAssignedKey(Action action) const
 
 void Player::initializeActions()
 {
-        m_actionBinding[GoLeft].action  = derivedAction<Actor>([] (Actor& actor, sf::Time){});
-        m_actionBinding[GoRight].action = derivedAction<Actor>([] (Actor& actor, sf::Time){});
+        m_actionBinding[GoForward].action  = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.goForward();});
+        m_actionBinding[GoBackward].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.goBackward();});
+
+        m_actionBinding[TurnLeft].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.turnLeft();});
+        m_actionBinding[TurnRight].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.turnRight();});
 }
 
 bool Player::isRealtimeAction(Action action)
 {
     switch (action)
     {
-            case GoLeft:
-            case GoRight:
+            case GoForward:
+            case GoBackward:
+            case TurnLeft:
+            case TurnRight:
                     return true;
 
             default:
