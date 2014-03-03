@@ -105,7 +105,7 @@ sf::Vector2f World::getMouseWorldPosition()
 
 void World::draw()
 {
-
+    m_worldView.setCenter(m_player->getPosition());
     m_window.setView(m_worldView);
     m_window.draw(ml);
     m_window.draw(m_sceneGraph);
