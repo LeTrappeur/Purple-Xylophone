@@ -86,15 +86,11 @@ void Actor::goBackward()
 }
 void Actor::turnLeft()
 {
-    float angle = Utility::pi() * getRotation() / 180.f;
-    std::cout << cosf(angle) << " " << sinf(angle) << std::endl;
     Entity::setRotation(- 5.f);
 }
 
 void Actor::turnRight()
 {
-    float angle = Utility::pi() * getRotation() / 180.f;
-    std::cout << cosf(angle) << " " << sinf(angle) << std::endl;
     Entity::setRotation(5.f);
 }
 

@@ -60,7 +60,21 @@ void World::buildScene()
 
 	ml.Load("map.tmx");
 	const std::vector<tmx::MapLayer>& layers = ml.GetLayers();
+    for (const auto& l : layers)
+	{
+		if (l.name == "Static") //static bodies which make up the map geometry
+		{
+			for (const auto& o : l.objects)
+			{
+				std::cout << o.GetName() << " at: " << o.GetPosition().x << " " << o.GetPosition().y << " size: " << o.GetAABB().width << " " << o.GetAABB().height << std::endl;
+                std::unique_ptr<Wall> wall(new Wall(o.GetAABB().width, o.GetAABB().height, tmx::BodyCreator::Add(o, m_physicWorld)));
+                wall->setPosition(o.GetCentre());
+                m_sceneLayers[Layer::Foreground]->attachChild(std::move(wall));
+			}
+		}
+	}
 
+    std::cout << "creating player" << std::endl;
 	std::unique_ptr<Actor> player(new Actor(Actor::Hero, m_textures, m_fonts, m_physicWorld));
 	m_player = player.get();
 	player->setPosition(m_spawnPosition);
