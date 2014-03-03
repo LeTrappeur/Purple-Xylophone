@@ -42,6 +42,8 @@ class Actor : public Entity
     protected:
         Type                    m_type;
         LookingOrientation      m_lookingOrientation;
+
+        sf::Sprite              m_sprite;
 };
 
 

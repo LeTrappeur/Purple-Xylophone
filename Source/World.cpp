@@ -24,7 +24,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds):
                   768
                   ),
     m_player(nullptr),
-    m_spawnPosition(0 ,0),
+    m_spawnPosition(1024/2 ,768/2),
     m_commandQueue(),
     m_contactListener(m_commandQueue),
     ml("maps/")
@@ -40,7 +40,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds):
 
 void World::loadTextures()
 {
-
+    m_textures.load(Textures::Hero, "player.png");
 }
 
 void World::buildScene()
@@ -58,9 +58,15 @@ void World::buildScene()
     std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
     m_sceneGraph.attachChild(std::move(soundNode));
 
-
 	ml.Load("map.tmx");
 	const std::vector<tmx::MapLayer>& layers = ml.GetLayers();
+
+	std::unique_ptr<Actor> player(new Actor(Actor::Hero, m_textures, m_fonts, m_physicWorld));
+	m_player = player.get();
+	player->setPosition(m_spawnPosition);
+	m_sceneLayers[Layer::Foreground]->attachChild(std::move(player));
+
+
 }
 
 void World::update(sf::Time dt)

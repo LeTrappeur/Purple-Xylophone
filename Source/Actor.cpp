@@ -11,7 +11,8 @@ Textures::ID toTextureID(Actor::Type type)
 {
     switch (type)
     {
-
+        case Actor::Hero:
+            return Textures::Hero;
     }
 
 }
@@ -19,11 +20,12 @@ Textures::ID toTextureID(Actor::Type type)
 Actor::Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, b2World& world):
     Entity(createBody(world)),
     m_type(type),
-    m_lookingOrientation(LookingOrientation::Down)
+    m_lookingOrientation(LookingOrientation::Down),
+    m_sprite(textures.get(toTextureID(type)))
 {
     // Player
     // TODO rendre adaptable taille anim (frame)
-    sf::Rect<float> spriteBounds(0,0,32,32);// = m_sprite.getGlobalBounds();
+    sf::Rect<float> spriteBounds = m_sprite.getGlobalBounds();
     Transformable::setOrigin(sf::Vector2f(spriteBounds.width/2,spriteBounds.height/2));
 
     b2FixtureDef ActorFixtureDef;
@@ -39,7 +41,7 @@ Actor::Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, 
 
 void Actor::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-
+    target.draw(m_sprite, states);
 }
 
 void Actor::updateCurrent(sf::Time dt, CommandQueue& commands)
