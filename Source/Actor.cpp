@@ -77,12 +77,13 @@ b2Body* Actor::createBody(b2World& world)
 void Actor::goForward()
 {
     float angle = Utility::pi() * getRotation() / 180.f;
-    m_body->ApplyForce(b2Vec2(-sinf(angle) * 90 , cosf(angle) * 90 ), m_body->GetWorldCenter());
+    m_body->ApplyForce(b2Vec2(-sinf(angle) * 90 , cosf(angle) * 90 ), m_body->GetWorldCenter()); // cos et sin inversés et sin négatif car coordonnées sfml inversées (x, -y)
 }
 
 void Actor::goBackward()
 {
-
+    float angle = Utility::pi() * getRotation() / 180.f;
+    m_body->ApplyForce(b2Vec2(sinf(angle) * 50 , -cosf(angle) * 50 ), m_body->GetWorldCenter()); // cos et sin inversés et sin négatif car coordonnées sfml inversées (x, -y)
 }
 void Actor::turnLeft()
 {
