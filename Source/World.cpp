@@ -7,6 +7,7 @@
 #include "SpriteNode.h"
 #include "SoundNode.h"
 #include "Wall.h"
+#include "Turret.h"
 
 const float SCALE = 30.f; // Box2D works in a scale of 30 pixels = 1 meter
 
@@ -41,6 +42,8 @@ World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds):
 void World::loadTextures()
 {
     m_textures.load(Textures::Hero, "player.png");
+    m_textures.load(Textures::Turret_B, "blue_turret.png");
+    m_textures.load(Textures::Turret_R, "red_turret.png");
 }
 
 void World::buildScene()
@@ -72,15 +75,23 @@ void World::buildScene()
                 m_sceneLayers[Layer::Foreground]->attachChild(std::move(wall));
 			}
 		}
+		if (l.name == "Turrets")
+		{
+			for (const auto& o : l.objects)
+			{
+			    std::cout << o.GetName() << " at: " << o.GetPosition().x << " " << o.GetPosition().y << " size: " << o.GetAABB().width << " " << o.GetAABB().height << std::endl;
+                std::unique_ptr<Turret> turret(new Turret(Turret::Red, m_textures, m_fonts, o.GetAABB().width, tmx::BodyCreator::Add(o, m_physicWorld)));
+                turret->setPosition(o.GetCentre());
+                m_sceneLayers[Layer::Foreground]->attachChild(std::move(turret));
+			}
+		}
 	}
 
-    std::cout << "creating player" << std::endl;
+    std::cout << "Creating player" << std::endl;
 	std::unique_ptr<Actor> player(new Actor(Actor::Hero, m_textures, m_fonts, m_physicWorld));
 	m_player = player.get();
 	player->setPosition(m_spawnPosition);
 	m_sceneLayers[Layer::Foreground]->attachChild(std::move(player));
-
-
 }
 
 void World::update(sf::Time dt)

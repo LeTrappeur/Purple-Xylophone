@@ -38,7 +38,6 @@ class Actor : public Entity
         Type                    m_type;
 
         sf::Sprite              m_sprite;
-        sf::Vector2f            m_headDirection;
 };
 
 
