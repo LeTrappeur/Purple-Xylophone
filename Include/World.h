@@ -45,6 +45,8 @@ class World
     private:
         void                                    loadTextures();
         void                                    buildScene();
+        void                                    createGeometry(tmx::MapLayer layer);
+        void                                    createTurrets(tmx::MapLayer layer);
         void                                    updateSounds();
 
     private:

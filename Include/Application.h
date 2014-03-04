@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>

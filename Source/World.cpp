@@ -66,32 +66,53 @@ void World::buildScene()
     for (const auto& l : layers)
 	{
 		if (l.name == "Static") //static bodies which make up the map geometry
-		{
-			for (const auto& o : l.objects)
-			{
-				std::cout << o.GetName() << " at: " << o.GetPosition().x << " " << o.GetPosition().y << " size: " << o.GetAABB().width << " " << o.GetAABB().height << std::endl;
-                std::unique_ptr<Wall> wall(new Wall(o.GetAABB().width, o.GetAABB().height, tmx::BodyCreator::Add(o, m_physicWorld)));
-                wall->setPosition(o.GetCentre());
-                m_sceneLayers[Layer::Foreground]->attachChild(std::move(wall));
-			}
-		}
+            createGeometry(l);
 		if (l.name == "Turrets")
-		{
-			for (const auto& o : l.objects)
-			{
-			    std::cout << o.GetName() << " at: " << o.GetPosition().x << " " << o.GetPosition().y << " size: " << o.GetAABB().width << " " << o.GetAABB().height << std::endl;
-                std::unique_ptr<Turret> turret(new Turret(Turret::Red, m_textures, m_fonts, o.GetAABB().width, tmx::BodyCreator::Add(o, m_physicWorld)));
-                turret->setPosition(o.GetCentre());
-                m_sceneLayers[Layer::Foreground]->attachChild(std::move(turret));
-			}
-		}
+            createTurrets(l);
+        if (l.name == "Spawn")
+        {
+            for (const auto& o : l.objects)
+            {
+                std::cout << "Creating player" << std::endl;
+                std::unique_ptr<Actor> player(new Actor(Actor::Hero, m_textures, m_fonts, m_physicWorld));
+                m_player = player.get();
+                player->setPosition(o.GetCentre());
+                m_sceneLayers[Layer::Foreground]->attachChild(std::move(player));
+            }
+        }
 	}
+}
 
-    std::cout << "Creating player" << std::endl;
-	std::unique_ptr<Actor> player(new Actor(Actor::Hero, m_textures, m_fonts, m_physicWorld));
-	m_player = player.get();
-	player->setPosition(m_spawnPosition);
-	m_sceneLayers[Layer::Foreground]->attachChild(std::move(player));
+void World::createGeometry(tmx::MapLayer layer)
+{
+    for (const auto& o : layer.objects)
+    {
+        std::cout << o.GetName() << " at: " << o.GetPosition().x << " " << o.GetPosition().y << " size: " << o.GetAABB().width << " " << o.GetAABB().height << std::endl;
+        std::unique_ptr<Wall> wall(new Wall(o.GetAABB().width, o.GetAABB().height, tmx::BodyCreator::Add(o, m_physicWorld)));
+        wall->setPosition(o.GetCentre());
+        m_sceneLayers[Layer::Foreground]->attachChild(std::move(wall));
+    }
+}
+
+void World::createTurrets(tmx::MapLayer layer)
+{
+    for (auto& o : layer.objects)
+    {
+        std::cout << o.GetName() << " at: " << o.GetPosition().x << " " << o.GetPosition().y << " radius: " << o.GetAABB().width/2.f << " " << o.GetAABB().height << std::endl;
+
+        Turret::Type type;
+        std::string typeProperty = o.GetPropertyString("Type");
+        if(typeProperty == "Blue")
+            type = Turret::Blue;
+        else if (typeProperty == "Red")
+            type = Turret::Red;
+        else
+            type = Turret::Blue;
+
+        std::unique_ptr<Turret> turret(new Turret(type, m_textures, m_fonts, o.GetAABB().width/2.f, tmx::BodyCreator::Add(o, m_physicWorld)));
+        turret->setPosition(o.GetCentre());
+        m_sceneLayers[Layer::Foreground]->attachChild(std::move(turret));
+    }
 }
 
 void World::update(sf::Time dt)

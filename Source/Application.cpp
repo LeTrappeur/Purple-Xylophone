@@ -9,7 +9,7 @@
 const sf::Time TIME_PER_FRAME = sf::seconds(1.f/60.f);
 
 Application::Application():
-    m_window(sf::VideoMode(1280, 720), "Kamekna project"),
+    m_window(sf::VideoMode(1280, 720), "Purple-Xylophone"),
     m_textures(),
     m_fonts(),
     m_player(),

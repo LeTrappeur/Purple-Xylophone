@@ -17,6 +17,11 @@ void MyContactListener::BeginContact(b2Contact* contact)
         SENSOR_FLAG = true;
 
     std::pair<Entity*, Entity*> entities = std::make_pair(A,B);
+
+    if(matchesCategory(entities, Category::PlayerActor, Category::Turret) && SENSOR_FLAG)
+    {
+        std::cout << "Entering zone !" << std::endl;
+    }
 }
 
 void MyContactListener::EndContact(b2Contact* contact)
@@ -29,6 +34,11 @@ void MyContactListener::EndContact(b2Contact* contact)
         SENSOR_FLAG = true;
 
     std::pair<Entity*, Entity*> entities = std::make_pair(A,B);
+
+    if(matchesCategory(entities, Category::PlayerActor, Category::Turret) && SENSOR_FLAG)
+    {
+        std::cout << "Leaving zone !" << std::endl;
+    }
 }
 
 bool MyContactListener::matchesCategory(std::pair<Entity*,Entity*>& entities, Category::Type type1, Category::Type type2)
