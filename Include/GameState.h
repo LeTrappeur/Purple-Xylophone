@@ -12,14 +12,19 @@
 class GameState : public State
 {
     public:
-                            GameState(StateStack& stack, Context context);
-        virtual void        draw();
-        virtual bool        update(sf::Time dt);
-        virtual bool        handleEvent(const sf::Event& event);
+                                GameState(StateStack& stack, Context context);
+        virtual void            draw();
+        virtual bool            update(sf::Time dt);
+        virtual bool            handleEvent(const sf::Event& event);
+
+        void                    goToNextLevel();
+        void                    registerLevels();
 
     private:
-        World               m_world;
-        Player&             m_player;
+        World                   m_world;
+        Player&                 m_player;
+
+        std::list<std::string>  m_levels;
 
 };
 

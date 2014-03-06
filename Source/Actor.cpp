@@ -20,7 +20,8 @@ Textures::ID toTextureID(Actor::Type type)
 Actor::Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, b2World& world):
     Entity(createBody(world)),
     m_type(type),
-    m_sprite(textures.get(toTextureID(type)))
+    m_sprite(textures.get(toTextureID(type))),
+    m_atEnd(false)
 {
     // Player
     // TODO rendre adaptable taille anim (frame)
@@ -93,5 +94,14 @@ void Actor::turnLeft()
 void Actor::turnRight()
 {
     Entity::setRotation(5.f);
+}
+
+bool Actor::hasReachedEnd() const
+{
+    return m_atEnd;
+}
+void Actor::setReachedEnd(bool atEnd)
+{
+    m_atEnd = atEnd;
 }
 

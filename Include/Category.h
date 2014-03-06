@@ -11,6 +11,9 @@ namespace Category
         PlayerActor = 1 << 2,
 
         Turret = 1 << 3,
+
+        EndZone = 1 << 4,
+
         SoundEffect = 1 << 6,
     };
 }

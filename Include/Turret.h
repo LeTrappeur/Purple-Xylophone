@@ -20,7 +20,6 @@ class Turret : public Entity
     private:
         private:
         virtual void            drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-        static b2Body*          createBody(b2World& world);
         virtual void            updateCurrent(sf::Time dt, CommandQueue& commands);
 
     private:

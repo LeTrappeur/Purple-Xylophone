@@ -2,6 +2,7 @@
 #include "ResourceHolder.h"
 #include "MusicPlayer.h"
 #include "Utility.h"
+#include "Player.h"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -18,15 +19,24 @@ GameoverState::GameoverState(StateStack& stack, Context context):
     sf::Vector2f viewSize = context.window->getView().getSize();
 
     m_gameoverText.setFont(font);
-    m_gameoverText.setString("Game Over ...");
     m_gameoverText.setCharacterSize(70);
-    Utility::centerOrigin(m_gameoverText);
-    m_gameoverText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
-
     m_instructionText.setFont(font);
-    m_instructionText.setString("(Press Backspace to return to the main menu)");
+
+    if (context.player->getMissionStatus() == Player::MissionFailure)
+    {
+        m_gameoverText.setString("Level failed!");
+        m_instructionText.setString("(Press Backspace to return to the main menu or Space to retry)");
+    }
+	else
+    {
+        m_gameoverText.setString("Level passed!");
+        m_instructionText.setString("(Press Backspace to return to the main menu or Space to go to the next level)");
+    }
+
     Utility::centerOrigin(m_instructionText);
     m_instructionText.setPosition(0.5f * viewSize.x, 0.6f * viewSize.y);
+    Utility::centerOrigin(m_gameoverText);
+    m_gameoverText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
 
     getContext().music->setPaused(true);
 }
@@ -64,6 +74,12 @@ bool GameoverState::handleEvent(const sf::Event& event)
     {
         requestStateClear();
         requestStackPush(States::Menu);
+    }
+
+    if (event.key.code == sf::Keyboard::Space)
+    {
+        requestStateClear();
+        requestStackPush(States::Game);
     }
 
     return false;

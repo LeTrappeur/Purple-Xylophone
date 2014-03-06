@@ -21,30 +21,30 @@
 #include "SoundPlayer.h"
 #include "Actor.h"
 
-
-
 class World
 {
     private:
         enum Layer
         {
             Background,
+            PlayerLayer,
             Foreground,
             LayerCount
         };
     public:
-        explicit                                World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds);
+        explicit                                World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds, const std::string& level);
 
         void                                    update(sf::Time dt);
         void                                    draw();
 
         CommandQueue&                           getCommandQueue();
-        sf::Vector2f                            getMouseWorldPosition();
-
+        sf::Vector2f                            getMouseWorldPosition() const;
+        bool                                    hasPlayerReachedEnd()const;
+        bool                                    hasAlivePlayer() const;
 
     private:
         void                                    loadTextures();
-        void                                    buildScene();
+        void                                    buildScene(const std::string& level);
         void                                    createGeometry(tmx::MapLayer layer);
         void                                    createTurrets(tmx::MapLayer layer);
         void                                    updateSounds();
@@ -62,7 +62,7 @@ class World
         MyContactListener                       m_contactListener;
         sf::FloatRect                           m_worldBounds;
 
-        SceneNode m_sceneGraph;
+        SceneNode                               m_sceneGraph;
         std::array<SceneNode*, LayerCount>      m_sceneLayers;
 
         Actor*                                  m_player;

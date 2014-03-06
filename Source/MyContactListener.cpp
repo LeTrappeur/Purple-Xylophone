@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Actor.h"
+#include "EndZone.h"
 
 MyContactListener::MyContactListener(CommandQueue& commandQueue):
     m_commandQueue(commandQueue),
@@ -22,6 +23,16 @@ void MyContactListener::BeginContact(b2Contact* contact)
     {
         std::cout << "Entering zone !" << std::endl;
     }
+
+    if(matchesCategory(entities, Category::PlayerActor, Category::EndZone) && SENSOR_FLAG)
+    {
+        std::cout << "Fin du niveau !" << std::endl;
+        auto& actor = static_cast<Actor&>(*entities.first);
+        auto& zone = static_cast<EndZone&>(*entities.second);
+
+        actor.setReachedEnd(true);
+
+    }
 }
 
 void MyContactListener::EndContact(b2Contact* contact)
@@ -33,12 +44,6 @@ void MyContactListener::EndContact(b2Contact* contact)
     if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor())
         SENSOR_FLAG = true;
 
-    std::pair<Entity*, Entity*> entities = std::make_pair(A,B);
-
-    if(matchesCategory(entities, Category::PlayerActor, Category::Turret) && SENSOR_FLAG)
-    {
-        std::cout << "Leaving zone !" << std::endl;
-    }
 }
 
 bool MyContactListener::matchesCategory(std::pair<Entity*,Entity*>& entities, Category::Type type1, Category::Type type2)

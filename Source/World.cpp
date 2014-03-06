@@ -8,24 +8,19 @@
 #include "SoundNode.h"
 #include "Wall.h"
 #include "Turret.h"
+#include "EndZone.h"
 
 const float SCALE = 30.f; // Box2D works in a scale of 30 pixels = 1 meter
 
 // TODO LEVEL
-World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds):
+World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds, const std::string& level):
     m_window(window),
     m_fonts(fonts),
     m_sounds(sounds),
     m_worldView(window.getDefaultView()),
     m_physicWorld(b2Vec2(0, 0.0f)),
-    m_worldBounds(
-                  0,
-                  0,
-                  1024,
-                  768
-                  ),
+    m_worldBounds(0,0,0,0),
     m_player(nullptr),
-    m_spawnPosition(1024/2 ,768/2),
     m_commandQueue(),
     m_contactListener(m_commandQueue),
     ml("maps/")
@@ -36,7 +31,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds):
 
     m_physicWorld.SetContactListener(&m_contactListener);
 
-    buildScene();
+    buildScene(level);
 }
 
 void World::loadTextures()
@@ -46,7 +41,17 @@ void World::loadTextures()
     m_textures.load(Textures::Turret_R, "red_turret.png");
 }
 
-void World::buildScene()
+bool World::hasPlayerReachedEnd() const
+{
+    return m_player->hasReachedEnd();
+}
+
+bool World::hasAlivePlayer() const
+{
+	return !m_player->isMarkedForRemoval();
+}
+
+void World::buildScene(const std::string& level)
 {
 
     // Init layers
@@ -61,7 +66,8 @@ void World::buildScene()
     std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
     m_sceneGraph.attachChild(std::move(soundNode));
 
-	ml.Load("map.tmx");
+    // TODO créer une class Level et gérer lesniveaux comme des ressources
+	ml.Load(level);
 	const std::vector<tmx::MapLayer>& layers = ml.GetLayers();
     for (const auto& l : layers)
 	{
@@ -69,6 +75,16 @@ void World::buildScene()
             createGeometry(l);
 		if (l.name == "Turrets")
             createTurrets(l);
+        if (l.name == "End")
+        {
+            for (const auto& o : l.objects)
+            {
+                std::cout << "Creating end zone" << std::endl;
+                std::unique_ptr<EndZone> endzone(new EndZone(m_textures, m_fonts, o.GetAABB().width, o.GetAABB().height, tmx::BodyCreator::Add(o, m_physicWorld)));
+                endzone->setPosition(o.GetCentre());
+                m_sceneLayers[Layer::Background]->attachChild(std::move(endzone));
+            }
+        }
         if (l.name == "Spawn")
         {
             for (const auto& o : l.objects)
@@ -77,7 +93,7 @@ void World::buildScene()
                 std::unique_ptr<Actor> player(new Actor(Actor::Hero, m_textures, m_fonts, m_physicWorld));
                 m_player = player.get();
                 player->setPosition(o.GetCentre());
-                m_sceneLayers[Layer::Foreground]->attachChild(std::move(player));
+                m_sceneLayers[Layer::PlayerLayer]->attachChild(std::move(player));
             }
         }
 	}
@@ -128,7 +144,7 @@ void World::update(sf::Time dt)
     m_sceneGraph.removeWrecks();
 }
 
-sf::Vector2f World::getMouseWorldPosition()
+sf::Vector2f World::getMouseWorldPosition() const
 {
     sf::Vector2i pixelPos = sf::Mouse::getPosition(m_window);
     sf::Vector2f worldPos = m_window.mapPixelToCoords(pixelPos, m_worldView);

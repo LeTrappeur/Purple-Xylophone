@@ -23,6 +23,13 @@ class Player
             ActionCount
         };
 
+        enum MissionStatus
+		{
+			MissionRunning,
+			MissionSuccess,
+			MissionFailure
+		};
+
     public:
         explicit                                Player();
         void                                    handleEvent(const sf::Event& event, CommandQueue& commands);
@@ -35,6 +42,13 @@ class Player
         // Retour template ? TODO
         //sf::Mouse::Button                       getAssignedKey(Action action) const;
 
+        void 					                setMissionStatus(MissionStatus status);
+		MissionStatus 			                getMissionStatus() const;
+
+        std::string                             getCurrentLevel() const;
+        void                                    setCurrentLevel(std::string level);
+
+
     private:
         void                                    initializeActions();
         static bool                             isRealtimeAction(Action action);
@@ -44,6 +58,9 @@ class Player
         std::map<sf::Keyboard::Key, Action>     m_keyBinding;
         std::map<sf::Mouse::Button, Action>     m_mouseBinding;
         std::map<Action, Command>               m_actionBinding;
+
+        std::string                             m_currentLevel;
+        MissionStatus 							m_currentMissionStatus;
 };
 
 #endif // PLAYER_H

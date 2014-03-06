@@ -27,17 +27,17 @@ class Actor : public Entity
         void                    turnLeft();
         void                    turnRight();
 
+        bool                    hasReachedEnd() const;
+        void                    setReachedEnd(bool atEnd);
+
     private:
         virtual void            drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         static b2Body*          createBody(b2World& world);
-
-    protected:
         virtual void            updateCurrent(sf::Time dt, CommandQueue& commands);
-
-    protected:
+   private:
         Type                    m_type;
-
         sf::Sprite              m_sprite;
+        bool                    m_atEnd;
 };
 
 

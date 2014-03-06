@@ -2,12 +2,14 @@
 #include "MusicPlayer.h"
 
 GameState::GameState(StateStack& stack, Context context)
-: State(stack, context)
-, m_world(*context.window, *context.fonts, *context.sounds)
-, m_player(*context.player)
+    : State(stack, context)
+    , m_world(*context.window, *context.fonts, *context.sounds, context.player->getCurrentLevel())
+    , m_player(*context.player)
 {
     context.music->setVolume(5.f);
     //context.music->play(Music::GameTheme);
+    m_player.setMissionStatus(Player::MissionRunning);
+    registerLevels();
 }
 
 void GameState::draw()
@@ -18,6 +20,9 @@ void GameState::draw()
 bool GameState::update(sf::Time dt)
 {
     m_world.update(dt);
+
+    if(m_world.hasPlayerReachedEnd())
+        goToNextLevel();
 
     CommandQueue& commands = m_world.getCommandQueue();
 
@@ -39,4 +44,19 @@ bool GameState::handleEvent(const sf::Event& event)
         requestStackPush(States::Pause);
     }
     return true;
+}
+
+void GameState::goToNextLevel()
+{
+    auto it = std::find(m_levels.begin(), m_levels.end(), m_player.getCurrentLevel()); // Position du niveau en cours
+
+    m_player.setMissionStatus(Player::MissionSuccess);
+    m_player.setCurrentLevel(*(++it)); // Niveau suivant
+    requestStackPush(States::Gameover);
+}
+
+void GameState::registerLevels()
+{
+    m_levels.push_back("level_1.tmx");
+    m_levels.push_back("level_2.tmx");
 }

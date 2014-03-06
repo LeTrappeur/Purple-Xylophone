@@ -78,13 +78,3 @@ unsigned int Turret::getCategory() const
 
     return Category::Turret;
 }
-
-b2Body* Turret::createBody(b2World& world)
-{
-    b2BodyDef ActorBodyDef;
-    ActorBodyDef.type = b2_staticBody;
-    ActorBodyDef.fixedRotation = true;
-    b2Body* body = world.CreateBody(&ActorBodyDef);
-
-    return body;
-}
