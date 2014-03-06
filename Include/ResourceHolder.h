@@ -18,7 +18,8 @@ namespace Textures
 {
     enum ID
     {
-        Hero,
+        Hero_Walk,
+        Hero_Idle,
         Turret_B,
         Turret_R,
     };

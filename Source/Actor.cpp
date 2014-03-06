@@ -7,25 +7,30 @@
 
 const float SCALE = 30.f; // Box2D works in a scale of 30 pixels = 1 meter
 
-Textures::ID toTextureID(Actor::Type type)
-{
-    switch (type)
-    {
-        case Actor::Hero:
-            return Textures::Hero;
-    }
 
-}
 
 Actor::Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, b2World& world):
     Entity(createBody(world)),
     m_type(type),
-    m_sprite(textures.get(toTextureID(type))),
-    m_atEnd(false)
+    m_idleAnim(textures.get(Textures::Hero_Idle)),
+    m_walkAnim(textures.get(Textures::Hero_Walk)),
+    m_atEnd(false),
+    m_isWalking(false)
 {
+
+    m_idleAnim.setFrameSize(sf::Vector2i(32, 30));
+	m_idleAnim.setNumFrames(3);
+	m_idleAnim.setDuration(sf::seconds(2.f));
+	m_idleAnim.setRepeating(true);
+
+	m_walkAnim.setFrameSize(sf::Vector2i(32, 30));
+	m_walkAnim.setNumFrames(3);
+	m_walkAnim.setDuration(sf::seconds(0.5f));
+	m_walkAnim.setRepeating(false);
+
     // Player
     // TODO rendre adaptable taille anim (frame)
-    sf::Rect<float> spriteBounds = m_sprite.getGlobalBounds();
+    sf::Rect<float> spriteBounds(0,0, m_walkAnim.getFrameSize().x, m_walkAnim.getFrameSize().y);// m_sprite.getGlobalBounds();
     Transformable::setOrigin(sf::Vector2f(spriteBounds.width/2,spriteBounds.height/2));
 
     b2FixtureDef ActorFixtureDef;
@@ -41,13 +46,34 @@ Actor::Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, 
 
 void Actor::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(m_sprite, states);
+    if(m_isWalking)
+        target.draw(m_walkAnim, states);
+    else
+        target.draw(m_idleAnim, states);
+
 }
 
 void Actor::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     // TODO
+    if(m_isWalking)
+    {
+        m_walkAnim.update(dt);
+
+        if(m_walkAnim.isFinished())
+        {
+            m_isWalking = false;
+            m_walkAnim.restart();
+        }
+    }
+    else
+    {
+        m_idleAnim.update(dt);
+    }
+
+
     Entity::updateCurrent(dt, commands);
+
 }
 
 bool Actor::isDestroyed() const
@@ -79,12 +105,15 @@ void Actor::goForward()
 {
     float angle = Utility::pi() * getRotation() / 180.f;
     m_body->ApplyForce(b2Vec2(-sinf(angle) * 90 , cosf(angle) * 90 ), m_body->GetWorldCenter()); // cos et sin inversés et sin négatif car coordonnées sfml inversées (x, -y)
+
+    m_isWalking = true;
 }
 
 void Actor::goBackward()
 {
     float angle = Utility::pi() * getRotation() / 180.f;
     m_body->ApplyForce(b2Vec2(sinf(angle) * 50 , -cosf(angle) * 50 ), m_body->GetWorldCenter()); // cos et sin inversés et sin négatif car coordonnées sfml inversées (x, -y)
+    m_isWalking = true;
 }
 void Actor::turnLeft()
 {

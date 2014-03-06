@@ -36,8 +36,13 @@ class Actor : public Entity
         virtual void            updateCurrent(sf::Time dt, CommandQueue& commands);
    private:
         Type                    m_type;
-        sf::Sprite              m_sprite;
+
+        Animation               m_currentAnim;
+        Animation               m_walkAnim;
+        Animation               m_idleAnim;
+
         bool                    m_atEnd;
+        bool                    m_isWalking;
 };
 
 

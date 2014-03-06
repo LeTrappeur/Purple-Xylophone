@@ -36,7 +36,8 @@ World::World(sf::RenderWindow& window, FontHolder& fonts, SoundPlayer& sounds, c
 
 void World::loadTextures()
 {
-    m_textures.load(Textures::Hero, "player.png");
+    m_textures.load(Textures::Hero_Walk, "hero_walk.png");
+    m_textures.load(Textures::Hero_Idle, "hero_idle.png");
     m_textures.load(Textures::Turret_B, "blue_turret.png");
     m_textures.load(Textures::Turret_R, "red_turret.png");
 }
