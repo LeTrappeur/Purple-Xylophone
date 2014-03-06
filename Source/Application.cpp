@@ -19,7 +19,7 @@ Application::Application():
 {
     m_window.setFramerateLimit(60.f);
 
-    m_fonts.load(Fonts::Main, "airstrip.ttf");
+    m_fonts.load(Fonts::Main, "chintzy.ttf");
     m_fonts.load(Fonts::Debug, "arial.ttf");
 
 
