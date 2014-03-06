@@ -17,6 +17,8 @@ Application::Application():
     m_sounds(),
     m_stateStack(State::Context(m_window, m_textures, m_fonts, m_player, m_music, m_sounds))
 {
+    m_window.setFramerateLimit(60.f);
+
     m_fonts.load(Fonts::Main, "airstrip.ttf");
     m_fonts.load(Fonts::Debug, "arial.ttf");
 
