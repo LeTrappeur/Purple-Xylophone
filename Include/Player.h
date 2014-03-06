@@ -23,11 +23,12 @@ class Player
             ActionCount
         };
 
-        enum MissionStatus
+        enum GameStatus
 		{
-			MissionRunning,
-			MissionSuccess,
-			MissionFailure
+			LevelRunning,
+			LevelSuccess,
+			LevelFailure,
+			LevelAllSuccess,
 		};
 
     public:
@@ -42,11 +43,11 @@ class Player
         // Retour template ? TODO
         //sf::Mouse::Button                       getAssignedKey(Action action) const;
 
-        void 					                setMissionStatus(MissionStatus status);
-		MissionStatus 			                getMissionStatus() const;
+        void 					                setGameStatus(GameStatus status);
+		GameStatus 			                    getGameStatus() const;
 
         std::string                             getCurrentLevel() const;
-        void                                    setCurrentLevel(std::string level);
+        void                                    setCurrentLevel(const std::string& level);
 
 
     private:
@@ -60,7 +61,7 @@ class Player
         std::map<Action, Command>               m_actionBinding;
 
         std::string                             m_currentLevel;
-        MissionStatus 							m_currentMissionStatus;
+        GameStatus 							    m_currentGameStatus;
 };
 
 #endif // PLAYER_H

@@ -8,7 +8,7 @@ GameState::GameState(StateStack& stack, Context context)
 {
     context.music->setVolume(5.f);
     //context.music->play(Music::GameTheme);
-    m_player.setMissionStatus(Player::MissionRunning);
+    m_player.setGameStatus(Player::LevelRunning);
     registerLevels();
 }
 
@@ -50,8 +50,15 @@ void GameState::goToNextLevel()
 {
     auto it = std::find(m_levels.begin(), m_levels.end(), m_player.getCurrentLevel()); // Position du niveau en cours
 
-    m_player.setMissionStatus(Player::MissionSuccess);
-    m_player.setCurrentLevel(*(++it)); // Niveau suivant
+    if(m_levels.back() == *it)
+    {
+        m_player.setGameStatus(Player::LevelAllSuccess); // fin du jeu
+    }
+    else
+    {
+        m_player.setGameStatus(Player::LevelSuccess);
+        m_player.setCurrentLevel(*(++it)); // Niveau suivant
+    }
     requestStackPush(States::Gameover);
 }
 

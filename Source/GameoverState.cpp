@@ -22,15 +22,20 @@ GameoverState::GameoverState(StateStack& stack, Context context):
     m_gameoverText.setCharacterSize(70);
     m_instructionText.setFont(font);
 
-    if (context.player->getMissionStatus() == Player::MissionFailure)
+    if (context.player->getGameStatus() == Player::LevelFailure)
     {
         m_gameoverText.setString("Level failed!");
         m_instructionText.setString("(Press Backspace to return to the main menu or Space to retry)");
     }
-	else
+	else if (context.player->getGameStatus() == Player::LevelSuccess)
     {
         m_gameoverText.setString("Level passed!");
         m_instructionText.setString("(Press Backspace to return to the main menu or Space to go to the next level)");
+    }
+    else
+    {
+        m_gameoverText.setString("Game finished");
+        m_instructionText.setString("(Press Backspace to return to the main menu)");
     }
 
     Utility::centerOrigin(m_instructionText);
@@ -76,7 +81,7 @@ bool GameoverState::handleEvent(const sf::Event& event)
         requestStackPush(States::Menu);
     }
 
-    if (event.key.code == sf::Keyboard::Space)
+    if (event.key.code == sf::Keyboard::Space && !(getContext().player->getGameStatus() == Player::LevelAllSuccess))
     {
         requestStateClear();
         requestStackPush(States::Game);

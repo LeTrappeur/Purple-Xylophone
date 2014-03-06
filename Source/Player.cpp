@@ -2,7 +2,7 @@
 #include "Actor.h"
 Player::Player():
     m_currentLevel("level_1.tmx"),
-    m_currentMissionStatus(MissionRunning)
+    m_currentGameStatus(LevelRunning)
 {
         // Set initial key bindings
         m_keyBinding[sf::Keyboard::Z] = GoForward;
@@ -136,17 +136,17 @@ std::string Player::getCurrentLevel() const
     return m_currentLevel;
 }
 
-void Player::setCurrentLevel(std::string level)
+void Player::setCurrentLevel(const std::string& level)
 {
     m_currentLevel = level;
 }
 
-void Player::setMissionStatus(MissionStatus status)
+void Player::setGameStatus(GameStatus status)
 {
-	m_currentMissionStatus = status;
+	m_currentGameStatus = status;
 }
 
-Player::MissionStatus Player::getMissionStatus() const
+Player::GameStatus Player::getGameStatus() const
 {
-	return m_currentMissionStatus;
+	return m_currentGameStatus;
 }
