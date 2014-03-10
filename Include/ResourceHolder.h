@@ -18,6 +18,7 @@ namespace Textures
 {
     enum ID
     {
+        TitleScreen,
         Hero_Walk,
         Hero_Idle,
         Turret_B,

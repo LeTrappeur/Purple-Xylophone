@@ -22,6 +22,7 @@ Application::Application():
     m_fonts.load(Fonts::Main, "chintzy.ttf");
     m_fonts.load(Fonts::Debug, "arial.ttf");
 
+    m_textures.load(Textures::TitleScreen, "titlescreen.png");
 
     m_statisticsText.setFont(m_fonts.get(Fonts::Debug));
     m_statisticsText.setString("DEBUG");

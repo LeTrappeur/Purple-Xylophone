@@ -14,14 +14,15 @@ TitleState::TitleState(StateStack& stack, Context context):
     m_showText(true),
     m_textEffectTime(sf::Time::Zero)
 {
-//    m_backgroundSprite.setTexture(context.textures->get(Textures::TitleScreen));
+    m_backgroundSprite.setTexture(context.textures->get(Textures::TitleScreen));
+
     Utility::centerOrigin(m_backgroundSprite);
     m_backgroundSprite.setPosition(context.window->getView().getSize() / 2.f);
 
     m_text.setFont(context.fonts->get(Fonts::Main));
     m_text.setString("Press any key to start");
     Utility::centerOrigin(m_text);
-    m_text.setPosition(context.window->getView().getSize() / 2.f);
+    m_text.setPosition(context.window->getView().getSize().x /2.f,  (context.window->getView().getSize().y)/ 1.1f);
 }
 
 void TitleState::draw()
