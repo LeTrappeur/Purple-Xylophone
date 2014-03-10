@@ -50,7 +50,6 @@ void Actor::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(m_walkAnim, states);
     else
         target.draw(m_idleAnim, states);
-
 }
 
 void Actor::updateCurrent(sf::Time dt, CommandQueue& commands)
@@ -62,15 +61,14 @@ void Actor::updateCurrent(sf::Time dt, CommandQueue& commands)
 
         if(m_walkAnim.isFinished())
         {
-            m_isWalking = false;
             m_walkAnim.restart();
+            m_isWalking = false;
         }
     }
     else
     {
         m_idleAnim.update(dt);
     }
-
 
     Entity::updateCurrent(dt, commands);
 

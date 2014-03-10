@@ -30,11 +30,17 @@ sf::Color toColor(Turret::Type type)
 Turret::Turret(Type type, const TextureHolder& textures, const FontHolder& fonts, float radius, b2Body* body) :
     Entity(body),
     m_type(type),
-    m_sprite(textures.get(toTextureID(type))),
+    m_idleAnim(textures.get(toTextureID(type))),
     m_radius(radius),
     m_detectRadius(radius)
 {
-    sf::Rect<float> spriteBounds = m_sprite.getGlobalBounds();
+
+    m_idleAnim.setFrameSize(sf::Vector2i(40, 40));
+	m_idleAnim.setNumFrames(3);
+	m_idleAnim.setDuration(sf::seconds(2.f));
+	m_idleAnim.setRepeating(true);
+
+    sf::Rect<float> spriteBounds(0, 0, m_idleAnim.getFrameSize().x, m_idleAnim.getFrameSize().y);
     Transformable::setOrigin(sf::Vector2f(spriteBounds.width/2,spriteBounds.height/2));
 
     // sensor rayon turret
@@ -59,12 +65,13 @@ Turret::Turret(Type type, const TextureHolder& textures, const FontHolder& fonts
 void Turret::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(m_detectRadius, states);
-    target.draw(m_sprite, states);
+    target.draw(m_idleAnim, states);
 }
 
 void Turret::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
     // TODO
+    m_idleAnim.update(dt);
     Entity::updateCurrent(dt, commands);
 }
 

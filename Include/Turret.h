@@ -2,7 +2,7 @@
 #define TURRET_H
 
 #include "Entity.h"
-
+#include "Animation.h"
 
 class Turret : public Entity
 {
@@ -24,7 +24,7 @@ class Turret : public Entity
 
     private:
         Type                    m_type;
-        sf::Sprite              m_sprite;
+        Animation               m_idleAnim;
         sf::CircleShape         m_detectRadius;
         float                   m_radius;
 };
