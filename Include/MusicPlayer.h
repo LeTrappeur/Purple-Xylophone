@@ -9,7 +9,7 @@ namespace Music
 {
     enum ID
     {
-
+        GameTheme,
     };
 }
 

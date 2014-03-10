@@ -6,6 +6,7 @@
 #include <Box2D/Box2D.h>
 
 #include "SceneNode.h"
+#include "ColorCategory.h"
 
 class Entity : public SceneNode
 {
@@ -22,6 +23,7 @@ class Entity : public SceneNode
 
         void                    destroy();
         virtual bool            isDestroyed() const;
+//        virtual unsigned int    getColorCategory() const;
 
 
         // TODO Warper pour passer body en private ?

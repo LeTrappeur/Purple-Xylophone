@@ -6,8 +6,8 @@ GameState::GameState(StateStack& stack, Context context)
     , m_world(*context.window, *context.fonts, *context.sounds, context.player->getCurrentLevel())
     , m_player(*context.player)
 {
-    context.music->setVolume(5.f);
-    //context.music->play(Music::GameTheme);
+    context.music->setVolume(20.f);
+    context.music->play(Music::GameTheme);
     m_player.setGameStatus(Player::LevelRunning);
     registerLevels();
 }

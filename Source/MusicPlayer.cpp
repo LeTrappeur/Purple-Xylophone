@@ -8,7 +8,7 @@ MusicPlayer::MusicPlayer():
     m_filenames(),
     m_volume(100.f)
 {
-
+    m_filenames[Music::GameTheme] = "gametheme.ogg";
 }
 
 void MusicPlayer::play(Music::ID theme)
