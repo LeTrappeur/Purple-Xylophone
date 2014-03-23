@@ -1,5 +1,8 @@
 #include "Player.h"
 #include "Actor.h"
+
+#include "ColorCategory.h"
+
 Player::Player():
     m_currentLevel("level_1.tmx"),
     m_currentGameStatus(LevelRunning)
@@ -9,6 +12,9 @@ Player::Player():
         m_keyBinding[sf::Keyboard::S] = GoBackward;
         m_keyBinding[sf::Keyboard::Q] = TurnLeft;
         m_keyBinding[sf::Keyboard::D] = TurnRight;
+        m_keyBinding[sf::Keyboard::R] = SetRed;
+        m_keyBinding[sf::Keyboard::G] = SetGreen;
+        m_keyBinding[sf::Keyboard::B] = SetBlue;
 
         // Set initial action bindings
         initializeActions();
@@ -115,6 +121,10 @@ void Player::initializeActions()
 
         m_actionBinding[TurnLeft].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.turnLeft();});
         m_actionBinding[TurnRight].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.turnRight();});
+
+        m_actionBinding[SetRed].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.setColorCategory(ColorCategory::Red);});
+        m_actionBinding[SetGreen].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.setColorCategory(ColorCategory::Green);});
+        m_actionBinding[SetBlue].action = derivedAction<Actor>([] (Actor& actor, sf::Time){ actor.setColorCategory(ColorCategory::Blue);});
 }
 
 bool Player::isRealtimeAction(Action action)

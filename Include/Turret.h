@@ -16,6 +16,7 @@ class Turret : public Entity
                                     Turret(Type type, const TextureHolder& textures, const FontHolder& fonts, float radius, b2Body* body);
         virtual unsigned int        getCategory() const;
         virtual bool                isDestroyed() const;
+        unsigned int                getColorCategory() const;
 
     private:
         private:
@@ -27,6 +28,8 @@ class Turret : public Entity
         Animation               m_idleAnim;
         sf::CircleShape         m_detectRadius;
         float                   m_radius;
+
+        unsigned int            m_turretColor;
 };
 
 #endif // TURRET_H

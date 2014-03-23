@@ -4,7 +4,7 @@ SoundPlayer::SoundPlayer():
     m_soundBuffers(),
     m_sounds()
 {
-
+    m_soundBuffers.load(SoundEffect::Alerte, "alerte.ogg");
 }
 
 void SoundPlayer::play(SoundEffect::ID effect)

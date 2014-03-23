@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Actor.h"
 #include "EndZone.h"
+#include "Turret.h"
 
 MyContactListener::MyContactListener(CommandQueue& commandQueue):
     m_commandQueue(commandQueue),
@@ -22,6 +23,16 @@ void MyContactListener::BeginContact(b2Contact* contact)
     if(matchesCategory(entities, Category::PlayerActor, Category::Turret) && SENSOR_FLAG)
     {
         std::cout << "Entering zone !" << std::endl;
+        auto& actor = static_cast<Actor&>(*entities.first);
+        auto& turret = static_cast<Turret&>(*entities.second);
+
+        if(actor.getColorCategory() != turret.getColorCategory())
+        {
+            std::cout << "Detecte!" << std::endl;
+            actor.destroy();
+        }
+
+
     }
 
     if(matchesCategory(entities, Category::PlayerActor, Category::EndZone) && SENSOR_FLAG)

@@ -15,7 +15,10 @@ Actor::Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, 
     m_idleAnim(textures.get(Textures::Hero_Idle)),
     m_walkAnim(textures.get(Textures::Hero_Walk)),
     m_atEnd(false),
-    m_isWalking(false)
+    m_isWalking(false),
+    m_suitColor(ColorCategory::None),
+    m_power(3),
+    m_isDetected(false)
 {
 
     m_idleAnim.setFrameSize(sf::Vector2i(32, 30));
@@ -71,12 +74,11 @@ void Actor::updateCurrent(sf::Time dt, CommandQueue& commands)
     }
 
     Entity::updateCurrent(dt, commands);
-
 }
 
-bool Actor::isDestroyed() const
+bool Actor::isMarkedForRemoval() const
 {
-    return false;
+    return isDestroyed();
 }
 
 unsigned int Actor::getCategory() const
@@ -130,5 +132,22 @@ bool Actor::hasReachedEnd() const
 void Actor::setReachedEnd(bool atEnd)
 {
     m_atEnd = atEnd;
+}
+
+void Actor::setColorCategory(unsigned int color)
+{
+    if(m_power > 0)
+    {
+        m_suitColor = color;
+        m_power--;
+        std::cout << "Power left: " << m_power << std::endl;
+    }
+    else
+        std::cout << "Not enough power !" << std::endl;
+}
+
+unsigned int Actor::getColorCategory() const
+{
+    return m_suitColor;
 }
 

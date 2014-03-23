@@ -40,7 +40,7 @@ namespace SoundEffect
 {
     enum ID
     {
-
+        Alerte,
     };
 }
 

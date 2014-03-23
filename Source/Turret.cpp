@@ -27,12 +27,25 @@ sf::Color toColor(Turret::Type type)
     }
 }
 
+unsigned int toColorcategory(Turret::Type type)
+{
+        switch (type)
+    {
+        case Turret::Blue:
+            return ColorCategory::Blue;
+
+        case Turret::Red:
+            return ColorCategory::Red;
+    }
+}
+
 Turret::Turret(Type type, const TextureHolder& textures, const FontHolder& fonts, float radius, b2Body* body) :
     Entity(body),
     m_type(type),
     m_idleAnim(textures.get(toTextureID(type))),
     m_radius(radius),
-    m_detectRadius(radius)
+    m_detectRadius(radius),
+    m_turretColor(toColorcategory(type))
 {
 
     m_idleAnim.setFrameSize(sf::Vector2i(40, 40));
@@ -84,4 +97,9 @@ unsigned int Turret::getCategory() const
 {
 
     return Category::Turret;
+}
+
+unsigned int Turret::getColorCategory() const
+{
+    return m_turretColor;
 }

@@ -20,7 +20,10 @@ class Player
             GoBackward,
             TurnLeft,
             TurnRight,
-            ActionCount
+            SetRed,
+            SetGreen,
+            SetBlue,
+            ActionCount,
         };
 
         enum GameStatus

@@ -137,12 +137,12 @@ void World::update(sf::Time dt)
     while(!m_commandQueue.isEmpty())
         m_sceneGraph.onCommand(m_commandQueue.pop(), dt);
 
+    m_sceneGraph.removeWrecks();
 
     m_physicWorld.Step(dt.asSeconds(), 8, 4);
     m_sceneGraph.update(dt, m_commandQueue);
 
     updateSounds();
-    m_sceneGraph.removeWrecks();
 }
 
 sf::Vector2f World::getMouseWorldPosition() const

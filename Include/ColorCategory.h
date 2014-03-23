@@ -6,9 +6,9 @@ namespace ColorCategory
     enum Type
     {
         None = 0,
-        Blue = 1 << 1,
-        Red = 1 << 0,
-        Violet = Blue | Red,
+        Blue = 1 << 0,
+        Red = 1 << 1,
+        Green = 1 << 2,
     };
 }
 

@@ -5,6 +5,7 @@
 #include "ResourceHolder.h"
 #include "TextNode.h"
 #include "Animation.h"
+#include "ColorCategory.h"
 
 class Actor : public Entity
 {
@@ -20,7 +21,7 @@ class Actor : public Entity
         explicit                Actor(Type type, const TextureHolder& textures, const FontHolder& fonts, b2World& world);
 
         virtual unsigned int    getCategory() const;
-        virtual bool            isDestroyed() const;
+        virtual bool            isMarkedForRemoval() const;
 
         void                    goForward();
         void                    goBackward();
@@ -29,6 +30,9 @@ class Actor : public Entity
 
         bool                    hasReachedEnd() const;
         void                    setReachedEnd(bool atEnd);
+
+        void                    setColorCategory(unsigned int color);
+        unsigned int            getColorCategory() const;
 
     private:
         virtual void            drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -43,6 +47,11 @@ class Actor : public Entity
 
         bool                    m_atEnd;
         bool                    m_isWalking;
+        bool                    m_isDetected;
+
+        int                     m_power;
+
+        unsigned int            m_suitColor;
 };
 
 

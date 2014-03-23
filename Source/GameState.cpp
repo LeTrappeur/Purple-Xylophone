@@ -24,6 +24,13 @@ bool GameState::update(sf::Time dt)
     if(m_world.hasPlayerReachedEnd())
         goToNextLevel();
 
+    else if(!m_world.hasAlivePlayer())
+    {
+        getContext().sounds->play(SoundEffect::Alerte);
+        m_player.setGameStatus(Player::LevelFailure);
+        requestStackPush(States::Gameover);
+    }
+
     CommandQueue& commands = m_world.getCommandQueue();
 
     m_player.handleRealTimeInput(commands);
